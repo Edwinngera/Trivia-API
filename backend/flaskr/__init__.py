@@ -311,7 +311,7 @@ def create_app(test_config=None):
     }
 
     @app.errorhandler(404)
-    def resource_not_found(error):
+    def resource_not_found_handler(error):
 
         error_reponse['error'] = 404
         error_reponse['success'] = False
