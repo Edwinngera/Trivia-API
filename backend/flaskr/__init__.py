@@ -99,7 +99,7 @@ def create_app(test_config=None):
             questions_query = Question.query.order_by(Question.id).all()
             questions = paginator(request, questions_query)
 
-            end_point_reponse=jsonify(
+            return_var=jsonify(
                 {
                     'success': True,
                     'questions': questions,
@@ -112,7 +112,7 @@ def create_app(test_config=None):
                 }
             )
 
-            return end_point_reponse
+            return return_var
         except Exception as e:
             abort(404, "Questions not found")
             print(str(e))
@@ -130,11 +130,11 @@ def create_app(test_config=None):
             question = Question.query.get(question_id)
             question.delete()
 
-            end_point_response = jsonify({
+            return_var = jsonify({
                 'success': True
             })
 
-            return end_point_response
+            return return_var
 
         except Exception as e:
             abort(404, "Request to delete question not successful")
@@ -156,16 +156,14 @@ def create_app(test_config=None):
         data = request.json
 
         try:
-            question_body = data['question']
+            body = data['question']#question body
             answer = data['answer']
             category = data['category']
             difficulty = data['difficulty']
-            question = Question(question_body, answer, category, difficulty)
-            question.insert()
+            question = Question(body, answer, category, difficulty)
+            question.insert() #insert question into the db
 
-            print(question.insert())
-
-            end_point_reponse = jsonify({
+            return_var = jsonify({
                 'success': True,
                 'message': "Question added successfully",
                 'question': question.id
@@ -173,7 +171,7 @@ def create_app(test_config=None):
             }
             )
 
-            return end_point_reponse
+            return return_var
         except  Exception as e:
             abort(422, "Questions not added successfully")
             print(str(e))
@@ -200,13 +198,13 @@ def create_app(test_config=None):
             questions = paginator(request, results)
 
             total_questions_size = len(Question.query.all())
-            end_point_response = jsonify({
+            return_var = jsonify({
                 'success': True,
                 'questions': questions,
                 'total_questions': total_questions_size,
                 'current_category': None
             })
-            return end_point_response
+            return return_var
         except Exception as e:
             abort(404, "The requested resource was not found")
             print(str(e))
@@ -222,9 +220,9 @@ def create_app(test_config=None):
     @app.route('/categories/<id>/questions', methods=['GET'])
     def show_questions_in_categorty(id):
         try:
-            group = Question.query.order_by(Question.id).filter(
+            questions_group = Question.query.order_by(Question.id).filter(
                 Question.category == id).all()
-            current_questions = paginator(request, group)
+            current_questions = paginator(request, questions_group)
 
             #get categories and order by Id 
  
@@ -233,7 +231,7 @@ def create_app(test_config=None):
             endpoint_response = jsonify({
                 'success': True,
                 'questions': current_questions,
-                'total_questions': len(group),
+                'total_questions': len(questions_group),
                 'categories': {category.id: category.type for category in categories},
                 'current_category': id
             })
@@ -288,12 +286,12 @@ def create_app(test_config=None):
                 question = questions[random.randrange(
                     0, len(questions))].format()
 
-            end_point_response = jsonify({
+            return_var = jsonify({
                 'success': True,
                 'question': question
             })
 
-            return end_point_response
+            return return_var
 
         except Exception as e:
             abort(422,"Request cannot be processed")
@@ -305,6 +303,7 @@ def create_app(test_config=None):
     including 404 and 422.
     """
 
+    #Intialize an empty error response object
     error_reponse = {
         'success': "",
         'error': "",
@@ -324,7 +323,14 @@ def create_app(test_config=None):
 
     @app.errorhandler(422)
     def request_not_processable_handler(error):
+
+        error_reponse['error'] = 422
+        error_reponse['success'] = False
+        error_reponse['The request is not processable']
+
+
         return jsonify({
+
             error_reponse
         }), 422
 
