@@ -67,7 +67,10 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(response.data)
         # Check response status 
         self.assertEqual(response.status_code, 404)
-        
+
+         #Check whether message is The request is not processable
+        self.assertEqual(data['message'], "The requested resource was not found")
+
         self.assertEqual(data['success'], False)
         
 
@@ -97,6 +100,10 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(response.data)
         # Check that response status is equal to 422
         self.assertEqual(response.status_code, 422)
+
+         #Check whether message is The request is not processable
+        self.assertEqual(data['message'], "The request is not processable")
+
         self.assertEqual(data['success'], False)
 
     # Test search question endpoint
@@ -141,6 +148,10 @@ class TriviaTestCase(unittest.TestCase):
         #Check the status of the response
         self.assertEqual(response.status_code, 422)
 
+         #Check whether message is The request is not processable
+        self.assertEqual(data['message'], "The request is not processable")
+
+
         self.assertEqual(data['success'], False)
  
     #Test questions end point(Adding questions)
@@ -162,6 +173,7 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(response.data)
         #Check response status
         self.assertEqual(response.status_code, 200)
+
         self.assertEqual(data['success'], True)
 
     def test_add_question_failure(self):
@@ -174,10 +186,14 @@ class TriviaTestCase(unittest.TestCase):
        
         # Add question
         response = self.client().post('questions', json=question)
+        #Get response data
         data = json.loads(response.data)
+        #Check whether the response status code is equal t0 422
         self.assertEqual(response.status_code, 422)
+        #Check whether success is equal to false
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "Sorry, request cannot be processed")
+        #Check whether message is The request is not processable
+        self.assertEqual(data['message'], "The request is not processable")
 
 
     
