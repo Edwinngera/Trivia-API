@@ -157,7 +157,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 ## POST '/questions'
 - Adds a new question to the database
-- Request JSON: {"question": string, "answer": string, "category": intger, "difficulty": integer}
+- Request JSON: {"question": string, "answer": string, "category": integer, "difficulty": integer}
 - Returns: A json success object
 ```
 {
