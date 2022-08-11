@@ -302,16 +302,6 @@ def create_app(test_config=None):
         'message': " "
     }
 
-    @app.errorhandler(404)
-    def resource_not_found_handler(error):
-
-        error_reponse['error'] = 404
-        error_reponse['success'] = False
-        error_reponse['The requested resource was not found']
-
-        return jsonify({
-            error_reponse
-        }), 404
 
     @app.errorhandler(422)
     def request_not_processable_handler(error):
@@ -325,6 +315,19 @@ def create_app(test_config=None):
 
             error_reponse
         }), 422
+
+    @app.errorhandler(404)
+    def resource_not_found_handler(error):
+
+        error_reponse['error'] = 404
+        error_reponse['success'] = False
+        error_reponse['The requested resource was not found']
+
+        return jsonify({
+            error_reponse
+        }), 404
+
+  
 
     @app.errorhandler(400)
     def bad_request_error_handler(error):
