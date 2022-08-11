@@ -131,9 +131,7 @@ def create_app(test_config=None):
         body=request.json
         
         try:
-            print(body)
             question_body = body['question']
-            print(question_body)
             answer = body['answer']
             category = body['category']
             difficulty = body['difficulty']
@@ -222,9 +220,6 @@ def create_app(test_config=None):
 
     @app.route("/quizzes", methods=["POST"])
     def get_quiz_questions():
-
-        data=request.get_json()
-
         try:
             body = request.get_json()
             
@@ -260,7 +255,7 @@ def create_app(test_config=None):
         return jsonify({
             'success': False,
             'error': 404,
-            'message': "Sorry, resource unavailable"
+            'message': "The requested resource was not found"
         }), 404
 
     @app.errorhandler(422)
@@ -268,7 +263,7 @@ def create_app(test_config=None):
         return jsonify({
             'success': False,
             'error': 422,
-            'message': "Sorry, request cannot be processed"
+            'message': "Sorry, request not processable"
         }), 422
 
     @app.errorhandler(400)
@@ -279,7 +274,12 @@ def create_app(test_config=None):
             'message': 'Bad request'
         }), 400
 
-
-
+    
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return jsonify({
+            "error": 500,
+            "message": "Internal server error."
+        })
 
     return app

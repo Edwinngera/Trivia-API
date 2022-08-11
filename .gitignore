@@ -11,5 +11,7 @@ venv
 .Trashes
 ehthumbs.db
 Thumbs.db
-env/
-frontend/node_modules/
+
+/backend/env
+/backend/venv
+/frontend/node_modules
