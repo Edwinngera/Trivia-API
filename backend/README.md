@@ -58,7 +58,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 ## GET '/categories'
 - Fetches a  categories dictionaries with the  keys as  the ids and the string as the  the category
 - Request Parameters : None
-- Response Body: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
+- Response Body: A Json object with a "categories key", that contains a object of key value pair id and category. 
 ```
 {
   "categories": {
@@ -81,7 +81,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 `curl http://localhost:5000/questions/`
 - Fetches a dictionary of questions
 - Request Parameters: None
-- Response Body: A json object of categories containin a dictionary of categories; the current category; questions in current page (total_questions), a sum total of all questions (total) and a list of questions with the answer, category, difficult and question as key:value pairs.
+- Response Body: A json object of categories containing  categories dictionary; current category; questions in current page, a sum total questions (total) and a list of questions with the answer, category, difficult and question as key:value pairs.
 ```
 {
   "categories": {
@@ -178,7 +178,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 
 ## POST '/questions/search'
-- Fetches all question matching a specified query (case-insensitive)
+- Fetches all question matching a specified query
 - Request JSON: {"searchTerm": string}
 - Returns: A list of questions
 ```

@@ -38,26 +38,38 @@ class TriviaTestCase(unittest.TestCase):
     # Fetch Category Success
     def test_fetch_cartegories_success(self):
         response = self.client().get("/categories")
+        #Check status code 
         self.assertEqual(response.status_code, 200)
+        #Load response data
+        data=json.loads(response)
+        #Check whether success==True
+        self.assertEqual(data['success'], True)
 
     # Fetch questions in a category
     def test_fetch_questions_in_category_success(self):
         response = self.client().get('/categories/1/questions')
+        # load response data
         data = json.loads(response.data)
+        #Check response status 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
+        #Check number of questions in the cartegory
         self.assertTrue(len(data['questions']))
+        #Check total number of questions
         self.assertTrue(data['total_questions'])
+        #Check current category
         self.assertTrue(data['current_category'])
 
     def test_fetch_questions_at_category_failure(self):
+         #Fetch questions in category id that doesnt exists
         response = self.client().get('categories/200/questions')
+        # load response data
         data = json.loads(response.data)
+        # Check response status 
         self.assertEqual(response.status_code, 404)
+        
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'Questions  not found')
-
-
+        
 
     # Test Delete question endpoint
     def test_delete_question_success(self):
@@ -65,9 +77,11 @@ class TriviaTestCase(unittest.TestCase):
         question = Question("test", "test", 1, 1)
         question.insert()
         id = question.id
-        # delete question and get responseponse
+        # delete question and get response
         response = self.client().delete(f"questions/{id}")
+        #Check response data
         data = json.loads(response.data)
+        #Check response code 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
 
@@ -76,12 +90,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(deleted_question, None)
 
     def test_delete_non_existent_question(self):
+
         response = self.client().delete('/questions/200')
+
+        # load response data
         data = json.loads(response.data)
+        # Check that response status is equal to 422
         self.assertEqual(response.status_code, 422)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "Request can't be processed")
-
 
     # Test search question endpoint
     def test_question_search_success(self):
@@ -89,11 +105,17 @@ class TriviaTestCase(unittest.TestCase):
             'searchTerm': 'edwin'
         }
         response = self.client().post('/questions/search', json=query)
-        data = json.loads(response.data)
 
+        # load response data
+        data = json.loads(response.data)
+        
+        #Check Status code
         self.assertEqual(response.status_code, 200)
+        #Check whether success parameter ==True
         self.assertEqual(data['success'], True)
+        #Check that question exists
         self.assertIsNotNone(data['questions'])
+
         self.assertIsNotNone(data['total_questions'])
 
 
@@ -104,35 +126,41 @@ class TriviaTestCase(unittest.TestCase):
 
         response = self.client().post('/quizzes', json=quiz)
         data = json.loads(response.data)
-
+        #Check response status code
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
 
     
     def test_quiz_failure(self):
+        #exclude the previous quetion object from the parameter
         quiz = {'quiz_category': {'type': 'test', 'id': 2}}
 
         response = self.client().post('/quizzes', json=quiz)
+        #Load response data
         data = json.loads(response.data)
-
+        #Check the status of the response
         self.assertEqual(response.status_code, 422)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "Request cannot be processed")
 
-    
+        self.assertEqual(data['success'], False)
+ 
     #Test questions end point(Adding questions)
 
     def test_add_question_success(self):
+
+        #create a test question
+
         question = {
-            'question': 'Who was the first presponseident of Kenya?',
+            'question': 'Who was the first president of Kenya?',
             'answer': 'Jomo Kenyatta',
             'category': 4,
             'difficulty': 1
         }
         
-        # Add question
+        # POST the question
         response = self.client().post('questions', json=question)
+        #Checj resposnse data
         data = json.loads(response.data)
+        #Check response status
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
 

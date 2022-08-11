@@ -75,17 +75,20 @@ def create_app(test_config=None):
     PER_PAGE = 10
 
     def paginator(request, questions_query):
-        page = request.args.get('page', 1, type=int)
-        begin = (page-1)*PER_PAGE
-        end = begin+PER_PAGE
+        try:
+            page = request.args.get('page', 1, type=int)
+            begin = (page-1)*PER_PAGE
+            end = begin+PER_PAGE
 
-        questions = []
+            questions = []
 
-        for question in questions_query:
-            questions.append(question.format())
+            for question in questions_query:
+                questions.append(question.format())
 
-        p_reponse = questions[begin:end]
-        return p_reponse
+            p_reponse = questions[begin:end]
+            return p_reponse
+        except Exception as e:
+            print(str(e))
 
     @app.route('/questions', methods=['GET'])
     def questions():
@@ -110,8 +113,9 @@ def create_app(test_config=None):
             )
 
             return end_point_reponse
-        except:
+        except Exception as e:
             abort(404, "Questions not found")
+            print(str(e))
     """
     @TODO:
     Create an endpoint to DELETE question using a question ID.
@@ -132,8 +136,9 @@ def create_app(test_config=None):
 
             return end_point_response
 
-        except:
+        except Exception as e:
             abort(404, "Request to delete question not successful")
+            print(str(e))
 
     """
     @TODO:
@@ -169,8 +174,9 @@ def create_app(test_config=None):
             )
 
             return end_point_reponse
-        except:
+        except  Exception as e:
             abort(422, "Questions not added successfully")
+            print(str(e))
 
     """
     @TODO:
@@ -201,8 +207,9 @@ def create_app(test_config=None):
                 'current_category': None
             })
             return end_point_response
-        except:
+        except Exception as e:
             abort(404, "The requested resource was not found")
+            print(str(e))
 
     """
     @TODO:
@@ -219,6 +226,8 @@ def create_app(test_config=None):
                 Question.category == id).all()
             current_questions = paginator(request, group)
 
+            #get categories and order by Id 
+ 
             categories = Category.query.order_by(Category.id).all()
 
             endpoint_response = jsonify({
@@ -230,8 +239,9 @@ def create_app(test_config=None):
             })
 
             return endpoint_response
-        except:
+        except Exception as e:
             abort(404, "The requested resource was not found")
+            print(str(e))
 
     """
     @TODO:
@@ -248,27 +258,33 @@ def create_app(test_config=None):
     @app.route("/quizzes", methods=["POST"])
     def get_quiz_questions():
         try:
-            data = request.get_json()
-            print(data)
-            previous_questions = data['previous_questions']
+            #get json data
+            data = request.json
+            #get previous quesion from the data object
+            p_questions = data['previous_questions']
+            #get category type 
             cat_type = data['quiz_category']['type']
+            #Get category id from the data object
             cat_id = data['quiz_category']['id']
             """
             #Check category of id/category type to determine whether the user selects All 
             Clicking on the All link returns the response below
             {'type': 'click', 'id': 0}
             """
+
+            #If the category ty is equal to click, the ALl link has been clicked 
             if cat_type == 'click':
                 questions = Question.query.filter(
-                    Question.id.notin_(previous_questions)).all()
+                    Question.id.notin_(p_questions)).all()
             else:
                 questions = Question.query.filter(Question.id.notin_(
-                    previous_questions).filter(Question.category == cat_id)).all()
+                    p_questions).filter(Question.category == cat_id)).all()
 
             if len(questions) == 0:
                 question = None
 
             else:
+                #get a random question in the category
                 question = questions[random.randrange(
                     0, len(questions))].format()
 
@@ -279,8 +295,9 @@ def create_app(test_config=None):
 
             return end_point_response
 
-        except Exception:
-            abort(422)
+        except Exception as e:
+            abort(422,"Request cannot be processed")
+            print(str(e))
 
     """
     @TODO:
@@ -306,13 +323,13 @@ def create_app(test_config=None):
         }), 404
 
     @app.errorhandler(422)
-    def request_not_processable(error):
+    def request_not_processable_handler(error):
         return jsonify({
             error_reponse
         }), 422
 
     @app.errorhandler(400)
-    def bad_request_error(error):
+    def bad_request_error_handler(error):
 
         error_reponse['error'] = 400
         error_reponse['success'] = False
@@ -323,7 +340,7 @@ def create_app(test_config=None):
         }), 400
 
     @app.errorhandler(500)
-    def internal_server_error(error):
+    def internal_server_error_handler(error):
 
         error_reponse['error'] = 500
         error_reponse['success'] = False
