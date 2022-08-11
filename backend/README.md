@@ -56,9 +56,9 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 # Endpoints
 
 ## GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
+- Fetches a  categories dictionaries with the  keys as  the ids and the string as the  the category
+- Request Parameters : None
+- Response Body: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
 ```
 {
   "categories": {
@@ -80,8 +80,8 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 #### Sample Request
 `curl http://localhost:5000/questions/`
 - Fetches a dictionary of questions
-- Request Arguments: None
-- Returns: A json object of categories containin a dictionary of categories; the current category; questions in current page (total_questions), a sum total of all questions (total) and a list of questions with the answer, category, difficult and question as key:value pairs.
+- Request Parameters: None
+- Response Body: A json object of categories containin a dictionary of categories; the current category; questions in current page (total_questions), a sum total of all questions (total) and a list of questions with the answer, category, difficult and question as key:value pairs.
 ```
 {
   "categories": {
@@ -107,15 +107,12 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 }
 ```
 
-
-
-
 ## GET 'categories/id/questions'
 #### Sample Request
 `curl http://localhost:5000/categories/1/questions`
 - Fetches a dictionary of questions from a category `category_id`
-- Request Arguments: category_id:`int`
-- Returns: A json object of categories containin a dictionary of categories; the current category; questions in current page (total_questions), a sum total of all questions (total) and a list of questions with the answer, category, difficult and question as key:value pairs.
+- Request Parameters   : id:`int`
+- Response Body: A json object of categories containin a dictionary of categories; the current category; questions in current page (total_questions), a sum total of all questions (total) and a list of questions with the answer, category, difficult and question as key:value pairs.
 ```
 {
   "categories": {
@@ -157,8 +154,8 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 ## POST '/questions'
 - Adds a new question to the database
-- Request JSON: {"question": string, "answer": string, "category": integer, "difficulty": integer}
-- Returns: A json success object
+- Request parameters : {"question": string, "answer": string, "category": integer, "difficulty": integer}
+- Response Body: A json success object
 ```
 {
     'success': True,
@@ -170,8 +167,8 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 
 - Deletes a new question of id `question_id` from the database
-- Request arguments: question_id:`int`
-- Returns: A json success object
+- Request   parameters : question_id:`int`
+- Response  Body: A json success object
 ```
 {
     'success': True
