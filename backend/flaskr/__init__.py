@@ -296,7 +296,7 @@ def create_app(test_config=None):
     """
 
     #Intialize an empty error response object
-    error_reponse = {
+    error_response = {
         'success': "",
         'error': "",
         'message': " "
@@ -306,25 +306,25 @@ def create_app(test_config=None):
     @app.errorhandler(422)
     def request_not_processable_handler(error):
 
-        error_reponse['error'] = 422
-        error_reponse['success'] = False
-        error_reponse['The request is not processable']
+        error_response['error'] = 422
+        error_response['success'] = False
+        error_response['The request is not processable']
 
 
         return jsonify({
 
-            error_reponse
+            error_response
         }), 422
 
     @app.errorhandler(404)
     def resource_not_found_handler(error):
 
-        error_reponse['error'] = 404
-        error_reponse['success'] = False
-        error_reponse['The requested resource was not found']
+        error_response['error'] = 404
+        error_response['success'] = False
+        error_response['The requested resource was not found']
 
         return jsonify({
-            error_reponse
+            error_response
         }), 404
 
   
@@ -332,23 +332,23 @@ def create_app(test_config=None):
     @app.errorhandler(400)
     def bad_request_error_handler(error):
 
-        error_reponse['error'] = 400
-        error_reponse['success'] = False
-        error_reponse['Sorry, Bad  request']
+        error_response['error'] = 400
+        error_response['success'] = False
+        error_response['Sorry, Bad  request']
 
         return jsonify({
-            error_reponse
+            error_response
         }), 400
 
     @app.errorhandler(500)
     def internal_server_error_handler(error):
 
-        error_reponse['error'] = 500
-        error_reponse['success'] = False
-        error_reponse['Internal server error']
+        error_response['error'] = 500
+        error_response['success'] = False
+        error_response['Internal server error']
 
         return jsonify({
-            error_reponse
+            error_response
         }), 500
 
     return app
