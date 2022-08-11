@@ -26,14 +26,8 @@ def create_app(test_config=None):
     @app.after_request
     def after_request_method(response):
 
-        header_parameter1 = ['Access-Control-Allow-Headers',
-                             'Content-Type,Authorization,true']
-
-        header_parameter2 = ['Access-Control-Allow-Headers',
-                             'Content-Type,Authorization,true']
-
-        response.headers.add(str(header_parameter1))
-        response.headers.add(str(header_parameter2))
+        response.headers.add('Access-Control-Allow-Headers','Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS')
 
         return response
 
@@ -92,30 +86,28 @@ def create_app(test_config=None):
 
     @app.route('/questions', methods=['GET'])
     def questions():
-        questions_query = Question.query.order_by(Question.id).all()
-        questions = paginator(request, questions_query)
-        total_questions = Question.query.all()
         try:
             questions_query = Question.query.order_by(Question.id).all()
             questions = paginator(request, questions_query)
-
-            return_var=jsonify(
+            qstns= Category.query.all()
+            print(qstns)
+         
+            return_var= jsonify(
                 {
                     'success': True,
                     'questions': questions,
-                    'total_questions': len(questions_query),
+                    'total_questions': len(questions),
                     'current_category': None,
                     'categories':
-                        {category.id: category.type for category in total_questions},
-                        'total': len(total_questions)
+                    {category.id: category.type for category in qstns},
+                    'total': len(Question.query.all())
 
                 }
             )
-
             return return_var
         except Exception as e:
-            abort(404, "Questions not found")
             print(str(e))
+                  
     """
     @TODO:
     Create an endpoint to DELETE question using a question ID.
@@ -137,7 +129,7 @@ def create_app(test_config=None):
             return return_var
 
         except Exception as e:
-            abort(404, "Request to delete question not successful")
+            abort(404)
             print(str(e))
 
     """
@@ -173,7 +165,7 @@ def create_app(test_config=None):
 
             return return_var
         except  Exception as e:
-            abort(422, "Questions not added successfully")
+            abort(422)
             print(str(e))
 
     """
@@ -206,7 +198,7 @@ def create_app(test_config=None):
             })
             return return_var
         except Exception as e:
-            abort(404, "The requested resource was not found")
+            abort(404)
             print(str(e))
 
     """
@@ -238,7 +230,7 @@ def create_app(test_config=None):
 
             return endpoint_response
         except Exception as e:
-            abort(404, "The requested resource was not found")
+            abort(404)
             print(str(e))
 
     """
@@ -294,7 +286,7 @@ def create_app(test_config=None):
             return return_var
 
         except Exception as e:
-            abort(422,"Request cannot be processed")
+            abort(422)
             print(str(e))
 
     """
