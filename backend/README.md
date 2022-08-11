@@ -175,8 +175,6 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 }
 ```
 
-
-
 ## POST '/questions/search'
 - Fetches all question matching a specified query
 - Request JSON: {"searchTerm": string}

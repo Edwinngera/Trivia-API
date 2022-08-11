@@ -265,7 +265,7 @@ def create_app(test_config=None):
             #Get category id from the data object
             cat_id = data['quiz_category']['id']
             """
-            #Check category of id/category type to determine whether the user selects All 
+            Check category of id/category type to determine whether the user selects All 
             Clicking on the All link returns the response below
             {'type': 'click', 'id': 0}
             """
