@@ -75,7 +75,7 @@ def create_app(test_config=None):
             end = begin+PER_PAGE
 
             questions = []
-
+            #Loop through query and append questions to formated questions into an  array
             for question in questions_query:
                 questions.append(question.format())
 
@@ -87,7 +87,9 @@ def create_app(test_config=None):
     @app.route('/questions', methods=['GET'])
     def questions():
         try:
+            #get questions from db and order by id
             questions_query = Question.query.order_by(Question.id).all()
+            #paginate
             questions = paginator(request, questions_query)
             qstns= Category.query.all()
             print(qstns)
@@ -119,9 +121,11 @@ def create_app(test_config=None):
     @app.route('/questions/<question_id>', methods=['DELETE'])
     def delete_question(question_id):
         try:
+            #get  question wwith id <question_id>'
             question = Question.query.get(question_id)
+            # delete question from DB
             question.delete()
-
+            
             return_var = jsonify({
                 'success': True
             })
