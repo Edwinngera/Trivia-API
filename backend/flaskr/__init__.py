@@ -271,8 +271,9 @@ def create_app(test_config=None):
                 questions = Question.query.filter(
                     Question.id.notin_(p_questions)).all()
             else:
-                questions = Question.query.filter(Question.id.notin_(
-                    p_questions).filter(Question.category == cat_id)).all()
+                questions = Question.query.filter(
+                    Question.id.notin_(p_questions),
+                    Question.category == cat_id).all()
 
             if len(questions) == 0:
                 question = None
